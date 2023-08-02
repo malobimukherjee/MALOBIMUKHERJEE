@@ -28,7 +28,9 @@ Screenshot of Yosys installation:
 Yosys is installed!
 
 ![Screenshot from 2023-08-02 10-45-41](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b53051af-8c34-40ee-b18f-bf72361ad167)
+</details>
 
+<details>
 <summary> iverilog </summary>
 
 I installed iverilog using the commands below:
@@ -37,6 +39,9 @@ sudo apt-get install iverilog
 
 ![Screenshot from 2023-08-02 10-48-04](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/3b9e8854-2066-494e-a360-7ea0131b8249)
 
+</details>
+
+<details>
 <summary> gtkwave </summary>
 
 I installed gtkwave using the commands below:
@@ -52,4 +57,4 @@ Below are the screenshots showing steps for installing gtkwave:
 Gtkwave window:
 ![Screenshot from 2023-08-02 11-02-07](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/518bcda6-6892-4596-801b-9ce4dfe64ba4)
 
-
+</details>
