@@ -26,6 +26,7 @@ Screenshot of Yosys installation:
 ![yosys-install](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/6dea691a-e93e-4900-b155-73eecda11ef3)
 
 Yosys is installed!
+
 ![Screenshot from 2023-08-02 10-45-41](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b53051af-8c34-40ee-b18f-bf72361ad167)
 
 <summary> iverilog </summary>
