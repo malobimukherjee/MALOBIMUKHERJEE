@@ -245,3 +245,73 @@ make test
 ![PDK2](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/ccc798ea-9c47-4465-b7a3-deb0942a7c40)
 
 </details>
+
+## Day 1
+
+<details>
+ <summary> Summary </summary>
+
+This section shows how I simulated and synthesized a 2x1 mux using iverilog and yosys respectively. iverilog generates from the RTL design and its testbench a value changing dump file (vcd). gtkwave is the tool used to plot the simulation results of the design. Yosys is a tool which synthesizes RTL designs into a netlist. It is also used to test the synthesized netlist when we provide it with a testbench.
+
+</details>	
+	
+<details>
+ <summary> Verilog codes </summary>
+The verilog codes of the 2x1 mux (good_mux.v) and its testbench (tb_good_mux.v) are taken from https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
+
+</details>
+
+ <details>
+ <summary> Simulation: iverilog and gtkwave </summary>
+ 
+ I used the following commands to simulate and view the plots of the RTL design:
+ 
+ ```bash
+ iverilog good_mux.v tb_good_mux.v
+ ./a.out
+ gtkwave tb_good_mux.vcd
+ ```
+	
+ Below is the screenshot of the gtkwave plots:
+ 
+![Screenshot from 2023-08-11 22-53-00](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/f9bf9399-c319-46c7-b58f-29e97f2a978d)
+
+The verilog code good_mux.v and its testbench tb_good_mux.v:
+
+![Screenshot from 2023-08-11 22-57-52](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/ad883da9-fafe-40e5-96d5-004e5fb73625)
+
+
+ 
+ </details>
+
+<details>
+ <summary> Synthesis: Yosys </summary>
+	
+ In the directory of the verilog files, I used the following commands to synthesize and view the synthesized deisgn:
+ 
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog good_mux.v
+yosys> synth -top good_mux
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+ ```
+ Below is the screenshot of the synthesized design:
+ 
+![Screenshot from 2023-08-11 23-15-00](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/a9121038-85d7-4db0-94c9-b194b76a1442)
+
+
+	
+ I used the following commands to generate the netlist:
+ 
+ ```bash
+ yosys> write_verilog <good_mux_netlist.v>
+ yosys> write_verilog -noattr <good_mux_netlist.v>
+ ```
+ 
+ Below is the screenshot of the generated netlist:
+ 
+ ![Screenshot from 2023-08-11 23-19-26](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/738dc136-96f1-4c36-85e3-3b7dfe6dc585)
+
+ 
+ </details>
