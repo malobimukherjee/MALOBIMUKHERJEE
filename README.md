@@ -548,3 +548,340 @@ Below is the screenshot of the netlist:
 
 
 </details>
+
+## Day 3
+	
+<details>
+ <summary> Summary </summary>
+
+I have synthesized designs with optimizations. Combinational logic optimizations include 1-) constant propagation (when the combination is just propagating a constant) and 2-) boolean logic optimization (when boolean rules are used to simplify the expression). Sequential logic optimizations include 1-) sequential constant propagation (when constant is propagated with clock involved), 2-) state optimization (when unused states are optimized), 3-) retiming (when logic is split to decrease timing of the different logic portions and increase frequency), and 4-) sequential logic cloning (when physical aware synthesis is done to optimize the floop plan)
+
+</details>	
+	
+<details>
+ <summary> Verilog codes </summary>
+
+The verilog codes used (opt_*, dff_const*, tb_dff_const*, and counter_opt*) are taken from https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
+
+</details>
+	
+<details>
+ <summary> Combinational logic optimizations: opt_check.v </summary>
+I used the below commands to view the synthesized design of opt_check.v with optimizations:
+
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog opt_check.v
+yosys> synth -top opt_check
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, as we can see a 2-input and gate is realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 09-04-39](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/ef92c932-a2b0-4e54-903b-0b1febec76ff)
+
+
+</details>
+	
+
+<details>
+ <summary> Combinational logic optimizations: opt_check2.v </summary>
+	I used the below commands to view the synthesized design of opt_check2.v with optimizations:
+ ```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog opt_check2.v
+yosys> synth -top opt_check2
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+Below is the screenshot of the obtained optimized design, as we can see a 2-input or gate is realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 09-07-36](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/74368ea7-7d6e-4279-88fa-e4322d3cc823)
+
+
+
+</details>
+	
+<details>
+ <summary> Combinational logic optimizations: opt_check3.v </summary>
+	
+I used the below commands to view the synthesized design of opt_check3.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog opt_check3.v
+yosys> synth -top opt_check3
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, as we can see a 3-input and gate is realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 09-11-03](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/f60f43f8-fbbf-494b-b967-921d78940fcf)
+
+</details>
+	
+<details>
+ <summary> Combinational logic optimizations: opt_check4.v </summary>
+	
+I used the below commands to view the synthesized design of opt_check4.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog opt_check4.v
+yosys> synth -top opt_check4
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, as we can see a 2-input xnor gate is realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 09-14-08](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/29092c3a-a6cb-42a5-bb20-fcdc4d5898c4)
+
+</details>
+
+		
+<details>
+ <summary> Combinational logic optimizations: multiple_module_opt.v </summary>
+	
+I used the below commands to view the synthesized design of multiple_module_opt.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog multiple_module_opt.v
+yosys> synth -top multiple_module_opt
+yosys> flatten 
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, as we can see 2 and gates and 1 or gate are realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 09-16-59](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/f294addb-43f5-4e33-bbae-1ce231b8906d)
+
+
+</details>
+	
+<details>
+ <summary> Combinational logic optimizations: multiple_module_opt2.v </summary>
+	
+I used the below commands to view the synthesized design of multiple_module_opt2.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog multiple_module_opt2.v
+yosys> synth -top multiple_module_opt2
+yosys> flatten 
+yosys> opt_clean -purge
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+
+```
+	
+Below is the screenshot of the obtained optimized design, as we can see no standard cells are realized as was expected when optimizations are applied:
+	
+![Screenshot from 2023-08-12 16-24-57](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/96042ee3-b427-4634-ad51-242753902118)
+
+
+
+</details>
+<details>
+ <summary> Sequential logic optimizations: dff_const1.v </summary>
+	
+I used the below commands to simulate the design of dff_const1.v:
+	
+```bash
+iverilog dff_const1.v tb_dff_const1.v
+./a.out
+gtkwave tb_dff_const1.vcd
+```	
+
+
+Below is the screenshot of the obtained simulation, a we can see even when reset is zero, Q waits for next rising edge of clock:
+	
+![Screenshot from 2023-08-12 16-28-42](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/61f3a8e3-b388-4e3b-813a-f7e42ab3a7d6)
+	
+I used the below commands to view the synthesized design of dff_const1.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog dff_const1.v
+yosys> synth -top dff_const1
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+
+Below is the screenshot of the obtained optimized design:
+	
+![Screenshot from 2023-08-12 16-34-06](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/6608c051-3de5-4318-8b1d-303a42ba7b0d)
+
+</details>
+	
+<details>
+ <summary> Sequential logic optimizations: dff_const2.v </summary>
+	
+I used the below commands to simulate the design of dff_const2.v:
+	
+```bash
+iverilog dff_const2.v tb_dff_const2.v
+./a.out
+gtkwave tb_dff_const2.vcd
+```	
+
+Below is the screenshot of the obtained simulation, as we can see Q is one regardless of the value of reset and clock:
+	
+![Screenshot from 2023-08-12 16-36-27](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/63f2b950-f3e6-4bdd-afec-0c9bbfd136fe)
+
+
+I used the below commands to view the synthesized design of dff_const2.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog dff_const2.v
+yosys> synth -top dff_const2
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design:
+
+![Screenshot from 2023-08-12 16-41-06](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/424636c5-b075-4df0-9ac1-9f1dc57a38f6)
+
+
+
+</details>
+
+	
+<details>
+ <summary> Sequential logic optimizations: dff_const3.v </summary>
+	
+I used the below commands to simulate the design of dff_const3.v:
+	
+
+```bash
+iverilog dff_const3.v tb_dff_const3.v
+./a.out
+gtkwave tb_dff_const3.vcd
+```	
+
+Below is the screenshot of the obtained simulation, as we can see Q does not follow Q1 immediately:
+	
+![Screenshot from 2023-08-12 16-44-42](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/61227eba-c821-40d2-b00c-2f12ac723a9a)
+
+I used the below commands to view the synthesized design of dff_const3.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog dff_const3.v
+yosys> synth -top dff_const3
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, the 2 flipflops are retained and optimization could not remove any of them:
+
+
+![Screenshot from 2023-08-12 16-59-59](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/dba0bec6-8254-473c-b478-72e99efdf94c)
+
+
+</details>
+	
+<details>
+ <summary> Sequential logic optimizations: dff_const4.v </summary>
+	
+I used the below commands to simulate the design of dff_const4.v:
+	
+```bash
+iverilog dff_const4.v tb_dff_const4.v
+./a.out
+gtkwave tb_dff_const4.vcd
+```	
+
+
+Below is the screenshot of the obtained simulation, as we can see Q and Q1 are one regardless of clk and reset:
+
+![Screenshot from 2023-08-12 17-25-23](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/eb6ec055-09a5-41b6-bd30-93554ea622cf)
+	
+I used the below commands to view the synthesized design of dff_const4.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog dff_const4.v
+yosys> synth -top dff_const4
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, and no hardware was used as expected:
+	
+![Screenshot from 2023-08-12 17-29-44](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/ce53a32e-a1fb-4415-9ea9-a187158aa16f)
+
+
+</details>
+	
+<details>
+ <summary> Sequential logic optimizations: dff_const5.v </summary>
+	
+I used the below commands to simulate the design of dff_const5.v:
+	
+```bash
+iverilog dff_const5.v tb_dff_const5.v
+./a.out
+gtkwave tb_dff_const5.vcd
+```	
+
+Below is the screenshot of the obtained simulation, as we can see when reset is zero, Q1 becomes one on the next rising edge of clk, and Q follows Q1 on the next rising edge of clk:
+
+![Screenshot from 2023-08-12 17-34-10](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/3e61a38a-5c13-4dc1-b633-4f9fe7e24ea5)
+
+	
+I used the below commands to view the synthesized design of dff_const5.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog dff_const5.v
+yosys> synth -top dff_const5
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+
+	
+Below is the screenshot of the obtained optimized design, and the 2 flipflops are retained:
+	
+![Screenshot from 2023-08-12 17-43-09](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/cb1fdf3d-1786-4acf-b48f-e54dc5a49be1)
+
+</details>
+	
+<details>
+ <summary> Sequential logic optimizations for unused outputs: counter_opt.v </summary>
+	
+I used the below commands to view the synthesized design of counter_opt.v with optimizations:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog counter_opt.v
+yosys> synth -top counter_opt
+yosys> dfflibmap -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained optimized design, and the only used output (count[0]) is present and 1 flipflop is used:
+	
+![Screenshot from 2023-08-12 18-10-14](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/3237d231-7218-4086-a2f3-354c0034c0c5)
+	
+</details>
+	
