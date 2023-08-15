@@ -590,7 +590,8 @@ Below is the screenshot of the obtained optimized design, as we can see a 2-inpu
 <details>
  <summary> Combinational logic optimizations: opt_check2.v </summary>
 	I used the below commands to view the synthesized design of opt_check2.v with optimizations:
- ```bash
+	
+```bash
 yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 yosys> read_verilog opt_check2.v
 yosys> synth -top opt_check2
