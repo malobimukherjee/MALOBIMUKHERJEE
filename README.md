@@ -589,7 +589,9 @@ Below is the screenshot of the obtained optimized design, as we can see a 2-inpu
 
 <details>
  <summary> Combinational logic optimizations: opt_check2.v </summary>
-	I used the below commands to view the synthesized design of opt_check2.v with optimizations:
+
+	
+I used the below commands to view the synthesized design of opt_check2.v with optimizations:
 	
 ```bash
 yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -599,6 +601,7 @@ yosys> opt_clean -purge
 yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 yosys> show
 ```
+
 Below is the screenshot of the obtained optimized design, as we can see a 2-input or gate is realized as was expected when optimizations are applied:
 	
 ![Screenshot from 2023-08-12 09-07-36](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/74368ea7-7d6e-4279-88fa-e4322d3cc823)
