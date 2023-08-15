@@ -1388,4 +1388,23 @@ Below is the screenshot of the obtained simulation, and this matches with pre-sy
 ![Screenshot from 2023-08-15 19-21-21](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/38918ab4-1697-4ab5-ae8c-9ae75abe31eb)
 
 </details>
+<details>
+ <summary> Simulation, synthesis, and GLS: rca.v </summary>
+
+I used the below commands to simulate the design of rca.v:
+	
+```bash
+iverilog rca.v fa.v tb_rca.v
+./a.out
+gtkwave tb_rca.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see it's an 8-bit RCA functionality:
+	
+
+[Screenshot from 2023-08-15 19-35-01](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/a1b8757a-28d5-414b-a11f-5b6a5f9126db)
+
+
+</details>
+
 	
