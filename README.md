@@ -1059,3 +1059,333 @@ Below is the screenshot of the obtained simulation, and this mismatches with pre
 ![Screenshot from 2023-08-15 16-12-58](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/7029e320-d8eb-4ecd-a26d-6b710aa2710d)
 	
 </details>
+
+## Day 5
+	
+<details>
+ <summary> Summary </summary>
+
+I have first learned about "if" and "case" statements which are used inside always blocks. "if" statements are used to convey priority logic (ony one portion can be executed), and the hardware will look like a series of muxes in hardware, but in "case" statements there is no inferred priotity (sequential execution can mean multiple portions can be executed) but also the hardware would be a series of muxes. Inferred latches can occur if there is an incomplete "if" statement (no else), in this case the hardware will have a latch storing a previous output value. This is bad coding example unless the latch is intended (like in case of a counter). Incomplete "case" can lead to inferred latches too, and to avoid that code the "case" with a default. Another caveat of "case" statements is partial assignments which also creates inferred latches, and to avoid that we should assign all the outputs in all the segments of the case. In "case" statements, one must be careful that portions should not be overlapping otherwise they could be executed due to the sequential non-prioritized execution of those statement.
+Then I have learned about looping constructs: for loop (inside always block) and generate for loop (cannot be used inside always block). The for loop is used to evaluate expressions in blocking format (provides code efficiency as complexity of circuits increases) while the generate for loop is used to instantiate hardware (provides code efficiency when hardware instantiation increases in complexity). 
+	
+</details>
+
+<details>
+ <summary> Verilog codes </summary>	
+
+The verilog codes (incomp*.v, *_case.v, *_generate.v, demux_case.v, and RCA.v) are taken from https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
+	
+</details>
+	
+<details>
+ <summary> Simulation and synthesis: incomp_if.v </summary>
+
+I used the below commands to simulate the design of incomp_if.v:
+	
+```bash
+iverilog incomp_if.v tb_incomp_if.v
+./a.out
+gtkwave tb_incomp_if.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see that there is an inferred latch as output is latching to a constant value when select is not high:
+
+![Screenshot from 2023-08-15 17-51-18](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/3ba7b783-a3bc-4108-8577-1f508496d9b7)
+
+
+
+I used the below commands to view the synthesized design of incomp_if.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog incomp_if.v
+yosys> synth -top incomp_if
+
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and a latch is seen as was expected:
+
+![Screenshot from 2023-08-15 17-55-28](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/21f943f0-8332-47ad-9482-9f73560a9a4e)
+
+</details>
+	
+<details>
+ <summary> Simulation and synthesis: incomp_if2.v </summary>
+
+I used the below commands to simulate the design of incomp_if2.v:
+	
+```bash
+iverilog incomp_if2.v tb_incomp_if2.v
+./a.out
+gtkwave tb_incomp_if2.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see that the output latches a constant value when i0 and i2 are zero:
+
+![Screenshot from 2023-08-15 18-00-15](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/604442f4-1992-4568-a899-2b345aa23ca8)
+
+I used the below commands to view the synthesized design of incomp_if2.v:
+
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog incomp_if2.v
+yosys> synth -top incomp_if2
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and we can see a latch as was expected:
+
+![Screenshot from 2023-08-15 18-05-35](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/41da324e-29bf-45d6-a7ee-b3212dbfc5c2)
+
+
+</details>
+
+<details>
+ <summary> Simulation and synthesis: incomp_case.v </summary>
+
+I used the below commands to simulate the design of incomp_case.v:
+	
+```bash
+iverilog incomp_case.v tb_incomp_case.v
+./a.out
+gtkwave tb_incomp_case.vcd
+```	
+
+
+Below is the screenshot of the obtained simulation, we can see that the output latches a constant value when select has a vlaue of 2 or 3 (when sel[1] is 1):
+
+
+![Screenshot from 2023-08-15 18-09-35](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/bbcfdb10-ee91-44b1-aec5-32c6eccd659a)
+
+I used the below commands to view the synthesized design of incomp_case.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog incomp_case.v
+
+yosys> synth -top incomp_case
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and we can see a latch as was expected:
+
+![Screenshot from 2023-08-15 18-14-44](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/76b9052a-f8d2-4eae-ba73-8d8ed1e354c1)
+ 
+</details>
+
+<details>
+ <summary> Simulation and synthesis: comp_case.v </summary>
+
+I used the below commands to simulate the design of comp_case.v:
+	
+```bash
+iverilog comp_case.v tb_comp_case.v
+./a.out
+gtkwave tb_comp_case.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see that the output follows i2 when select has a value of 2 or 3 (when sel[1] is 1):
+
+![Screenshot from 2023-08-15 18-18-00](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/619ce56b-1efb-4a36-b34c-027e7adf194c)
+
+
+I used the below commands to view the synthesized design of comp_case.v:
+	
+
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog comp_case.v
+yosys> synth -top comp_case
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and we do not see a latch as was expected:
+	
+![Screenshot from 2023-08-15 18-26-04](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b86bbbde-e7ad-400a-bd27-41830805d446)
+
+
+</details>
+	
+<details>
+ <summary> Synthesis: partial_case_assign.v </summary>
+
+I used the below commands to view the synthesized design of partial_case_assign.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog partial_case_assign.v
+yosys> synth -top partial_case_assign
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and we see one latch for x output as was expected, and the boolean expressions of x and y that were expected are also inferred by the design obtained:
+![Screenshot from 2023-08-15 18-29-43](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b99e8214-1306-44d9-a883-899789abfad3)
+
+
+</details>
+
+<details>
+ <summary> Simulation, synthesis, and GLS: bad_case.v </summary>
+
+I used the below commands to simulate the design of bad_case.v:
+	
+```bash
+iverilog bad_case.v tb_bad_case.v
+./a.out
+gtkwave tb_bad_case.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see that when sel is "11", the simulator is getting confused and output y is taking a constant "1" value:
+	
+![Screenshot from 2023-08-15 18-32-48](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b5d211b3-6713-4528-8661-f17428cac6ca)
+
+I used the below commands to synthesize and view the synthesized design of bad_case.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog bad_case.v
+yosys> synth -top bad_case
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> write_verilog -noattr bad_case_net.v
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and there is no inferred latch:
+
+
+![Screenshot from 2023-08-15 18-39-18](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/c7f5f8fb-ca40-4be2-9176-f0bf6b09a713)
+
+
+I used the below commands to carry out GLS of bad_case.v:
+	
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v bad_case_net.v tb_bad_case.v
+./a.out
+gtkwave tb_bad_case.vdc
+```	
+	
+Below is the screenshot of the obtained simulation, and this mismatches with pre-synthesis simulation. When sel is "11", y takes value of i3 and no latching happens here:
+	
+![Screenshot from 2023-08-15 18-42-50](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/20c1e304-24fe-464e-863e-bda08b8ae3c4)
+
+</details>
+
+<details>
+
+ <summary> Simulation, synthesis, and GLS: mux_generate.v </summary>
+
+I used the below commands to simulate the design of mux_generate.v:
+	
+```bash
+iverilog mux_generate.v tb_mux_generate.v>
+./a.out
+gtkwave tb_mux_generate.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see it's a 4:1 mux functionality:
+	
+
+![Screenshot from 2023-08-15 18-42-50](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/92f036e2-797a-4037-b1cf-9b848d35cd2d)
+
+I used the below commands to synthesize and view the synthesized design of mux_generate.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog mux_generate.v
+yosys> synth -top mux_generate
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> write_verilog -noattr mux_generate_net.v
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and it is a 4:1 mux:
+	
+
+![Screenshot from 2023-08-15 18-55-43](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/bcd1b563-524e-458e-a4c4-0b5e662d8844)
+
+
+I used the below commands to carry out GLS of mux_generate.v:
+	
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v mux_generate_net.v tb_mux_generate.v
+./a.out
+gtkwave tb_mux_generate.vdc
+```	
+	
+Below is the screenshot of the obtained simulation, and this matches with pre-synthesis simulation:
+![Screenshot from 2023-08-15 19-00-28](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/b9c40c64-8c4a-4800-89b2-2a60d1ee3b82)
+
+
+</details>
+	
+<details>
+ <summary> Simulation: demux_case.v </summary>
+
+I used the below commands to simulate the design of demux_case.v:
+	
+```bash
+iverilog demux_case.v tb_demux_case.v
+./a.out
+gtkwave tb_demux_case.vcd
+```	
+Below is the screenshot of the obtained simulation, we can see it's a 1:8 demux functionality:
+	
+![Screenshot from 2023-08-15 19-07-09](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/fefd6b2a-05a2-4378-a4ff-417116cd5173)
+
+
+</details>
+	
+<details>
+ <summary> Simulation, synthesis, and GLS: demux_generate.v </summary>
+
+I used the below commands to simulate the design of demux_generate.v:
+	
+```bash
+iverilog demux_generate.v tb_demux_generate.v
+./a.out
+gtkwave tb_demux_generate.vcd
+```	
+
+Below is the screenshot of the obtained simulation, we can see it's a 1:8 demux functionality (same as demux_case.v):
+	
+![Screenshot from 2023-08-15 19-12-03](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/9deb6c50-d6c2-4386-a383-c290348452d3)
+
+
+I used the below commands to synthesize and view the synthesized design of demux_generate.v:
+	
+```bash
+yosys> read_liberty -lib /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> read_verilog demux_generate.v
+yosys> synth -top demux_generate
+yosys> abc -liberty /home/malobi/Verilog/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+yosys> write_verilog -noattr demux_generate_net.v
+yosys> show
+```
+	
+Below is the screenshot of the obtained design, and it is a 1:8 demux:
+	
+
+![Screenshot from 2023-08-15 19-15-35](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/aaafcfe7-32b3-44ef-bd4a-3764e90e3656)
+
+I used the below commands to carry out GLS of demux_generate.v:
+	
+```bash
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v demux_generate_net.v tb_demux_generate.v
+./a.out
+gtkwave tb_demux_generate.vcd
+```	
+	
+Below is the screenshot of the obtained simulation, and this matches with pre-synthesis simulation:
+
+
+![Screenshot from 2023-08-15 19-21-21](https://github.com/malobimukherjee/MALOBIMUKHERJEE/assets/141206513/38918ab4-1697-4ab5-ae8c-9ae75abe31eb)
+
+</details>
+	
